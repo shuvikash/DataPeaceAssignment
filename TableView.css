@@ -1,0 +1,80 @@
+.list{
+    border-collapse: collapse;
+    width: 100%;
+	margin:20px;
+}
+.list td, .list th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+.tableheader{
+	background-color: #ddd;
+}
+.header{
+	background-color:blue;
+	height:40px;
+	color: white;
+    padding:1px;
+	margin: 10px;
+	box-shadow: 2px 4px 12px #ededed;
+}
+
+.list tr:nth-child(even){background-color: #f2f2f2;}
+
+.list tr:hover {background-color: #ddd;}
+
+.search {
+    width: 300px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 9px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+	border: none;
+    border-color: transparent;
+}
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 46.70px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+}
+
+.pagination a.active {
+    background-color: blue;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.pagination a:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination a:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.btn-default {
+  font-family: Raleway-SemiBold;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #ddd;
+  line-height: 20px;
+  border-radius: 40px;
+  background: transparent;
+  transition: all 0.3s ease 0s;
+  width: 9%;
+}
+.np-btn{
+	margin:22px;
+}
