@@ -100,10 +100,11 @@ class TableView extends React.Component {
 	// Logic for displaying users
     const indexOfLastUser = this.state.currentPage * this.state.itemPerPage;
     const indexOfFirstUser = indexOfLastUser - this.state.itemPerPage;
-	/*if(this.state.searchText)
+    let currentUser;
+	if(this.state.searchText)
 	currentUser = filteredUsers.slice(0,5);	
-	else*/
-    const currentUser = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+	else
+        currentUser = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 		
 	// Logic for displaying page numbers
     const pageNumbers = [];
