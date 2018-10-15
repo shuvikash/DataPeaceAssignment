@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import './TableView.css';
 import { Link } from 'react-router-dom';
+import Pagination from "react-js-pagination";
 
 class TableView extends React.Component {
 	constructor(props) {
@@ -11,15 +12,22 @@ class TableView extends React.Component {
 		   searchText: "",
 		   sortOrder:'ASC',
 		   currentPage: 1,
-           itemPerPage: 5
+           itemPerPage: 5,
+		   activePage: 2
 		};
 		this.detailView=this.detailView.bind(this);
 		this.ascCompareBy=this.ascCompareBy.bind(this);
 		this.dscCompareBy=this.dscCompareBy.bind(this);
 		this.sortBy=this.sortBy.bind(this);
 		this.handleSearchText=this.handleSearchText.bind(this);
-		this.handleClick = this.handleClick.bind(this);
+		this.handleNextClick = this.handleNextClick.bind(this);
+		this.handlePreviousClick = this.handlePreviousClick.bind(this);
+		this.handlePageChange = this.handlePageChange.bind(this);
 	}
+	
+	handlePageChange(pageNumber) {
+    this.setState({activePage: pageNumber,currentPage: pageNumber});
+    }
 	detailView(id) {
 		window.location='/user/'+id;
     }
@@ -64,22 +72,39 @@ class TableView extends React.Component {
     handleSearchText(e) {
 		this.setState({ searchText: e.target.value });
     }
-    handleClick(event) {
+    handleNextClick() {
+		const page=Math.ceil(this.state.users.length / this.state.itemPerPage);
+		if(this.state.currentPage<page)
+		{
+		const next=this.state.currentPage+1;
         this.setState({
-         currentPage: Number(event.target.id)
-       });
+         currentPage: next,activePage: next
+		});
+		}
+    }
+	handlePreviousClick() {
+		if(this.state.currentPage>1)
+		{
+		const next=this.state.currentPage-1;
+        this.setState({
+         currentPage: next,activePage: next
+		});
+		}
     }
 	render() {
+
 	//Filter the users based on searching text
 	let filteredUsers = this.state.users.filter((user)=>{
       return user.first_name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !==-1;
-	});
-	
+		});
 	// Logic for displaying users
     const indexOfLastUser = this.state.currentPage * this.state.itemPerPage;
     const indexOfFirstUser = indexOfLastUser - this.state.itemPerPage;
-    const currentUser = this.state.users.slice(indexOfFirstUser, indexOfLastUser);
-	
+	/*if(this.state.searchText)
+	currentUser = filteredUsers.slice(0,5);	
+	else*/
+    const currentUser = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+		
 	// Logic for displaying page numbers
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(this.state.users.length / this.state.itemPerPage); i++) {
@@ -88,13 +113,7 @@ class TableView extends React.Component {
      
     const renderPageNumbers = pageNumbers.map(number => {
       return (
-        <li
-          key={number}
-          id={number}
-          onClick={this.handleClick}
-        >
-          {number}
-        </li>
+	  <a href="#" key={number} id={number} onClick={this.handleClick}>{number}</a>
       );
     });
 	return (
@@ -105,6 +124,7 @@ class TableView extends React.Component {
 	  <div>
 	  <form>
          <input type="text" placeholder="Search by first name" onChange={this.handleSearchText} className="search" style={{backgroundImage:"url('search.png')",backgroundSize:"25px 20px"}}/>
+		 {this.state.currentPage*5-4}-{this.state.currentPage*5}
 	  </form>
 	</div>
 	<div className="table-responsive"> 	  
@@ -124,7 +144,7 @@ class TableView extends React.Component {
      </thead>
      <tbody>
 	  { 
-	  filteredUsers.map((user,i) => 
+	  currentUser.map((user,i) => 
 	  <tr key={'user_' + i} onClick={()=>{this.detailView(user.id)}}>
 	    <td>{user.first_name}</td>
 	    <td>{user.last_name}</td>
@@ -142,22 +162,18 @@ class TableView extends React.Component {
    </div>
       <div className="np-btn">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-        <button type="button" className="btn btn-default" style={{marginRight:'895px'}}>Previous</button>
-         <button type="button" className="btn btn-default">Next</button>
+        <button type="button" className="btn btn-default" style={{marginRight:'895px'}} onClick={this.handlePreviousClick}>Previous</button>
+        <button type="button" className="btn btn-default" onClick={this.handleNextClick}>Next</button>
       </div>
-      <div className="pagination">
-          <a href="#">&laquo;</a>
-          <a href="#">1</a>
-          <a className="active" href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-          <a href="#">6</a>
-          <a href="#">7</a>
-          <a href="#">8</a>
-          <a href="#">9</a>
-          <a href="#">&raquo;</a>
-       </div>
+      <div>
+	   <Pagination
+          activePage={this.state.activePage}
+          itemsCountPerPage={this.state.itemPerPage}
+          totalItemsCount={Math.ceil(this.state.users.length)}
+          pageRangeDisplayed={10}
+          onChange={this.handlePageChange}
+       />
+	   </div>
 	</div>
 	);
     }
